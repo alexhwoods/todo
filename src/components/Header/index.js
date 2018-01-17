@@ -1,14 +1,23 @@
 import React from 'react'
-import { View, TextInput, StyleSheet } from 'react-native'
+import { Keyboard, View, TextInput, StyleSheet } from 'react-native'
 
 class Header extends React.Component {
+  handleSubmitEditing = () => {
+    this.props.handleAddItem()
+    Keyboard.dismiss()
+  }
+
   render() {
     return (
       <View style={styles.header}>
         <TextInput
           blurOnSubmit={false}
+          onChangeText={this.props.handleValueChange}
+          onSubmitEditing={this.handleSubmitEditing}
           placeholder="Add item"
+          returnKeyType="done"
           style={styles.input}
+          value={this.props.value}
         />
       </View>
     )
