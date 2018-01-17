@@ -22,6 +22,11 @@ export default class App extends React.Component {
     })
   }
 
+  handleRemoveItem = id => {
+    const { items } = this.state
+    this.setState({ items: items.filter(item => item.id !== id) })
+  }
+
   handleToggleComplete = (id, complete) => {
     const { items } = this.state
     this.setState({
@@ -43,7 +48,11 @@ export default class App extends React.Component {
             data={items.map(item => ({ ...item, key: item.id }))}
             ItemSeparatorComponent={() => <View style={styles.separator} />}
             renderItem={({ item }) => (
-              <Row {...item} handleToggleComplete={this.handleToggleComplete} />
+              <Row
+                {...item}
+                handleRemoveItem={() => this.handleRemoveItem(item.id)}
+                handleToggleComplete={this.handleToggleComplete}
+              />
             )}
             style={styles.list}
           />
