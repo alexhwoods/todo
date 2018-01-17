@@ -4,11 +4,12 @@ import { View, StyleSheet, Platform, FlatList } from 'react-native'
 
 import Header from './components/Header'
 import Row from './components/Row'
+import Footer from './components/Footer'
 
 export default class App extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { items: [], value: '' }
+    this.state = { items: [], value: '', filter: 'ALL' }
   }
 
   handleAddItem = () => {
@@ -20,6 +21,15 @@ export default class App extends React.Component {
       items: items.concat({ id: uuidv4(), value, complete: false }),
       value: '',
     })
+  }
+
+  getFilteredItems = () => {
+    const { filter, items } = this.state
+
+    if (filter === 'ALL') return items
+    else if (filter === 'COMPLETED')
+      return items.filter(({ complete }) => complete === true)
+    else return items.filter(({ complete }) => complete === false)
   }
 
   handleRemoveItem = id => {
@@ -35,7 +45,9 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { value, items } = this.state
+    const { value, items, filter } = this.state
+    const filteredItems = this.getFilteredItems()
+
     return (
       <View style={styles.container}>
         <Header
@@ -45,7 +57,7 @@ export default class App extends React.Component {
         />
         <View style={styles.content}>
           <FlatList
-            data={items.map(item => ({ ...item, key: item.id }))}
+            data={filteredItems.map(item => ({ ...item, key: item.id }))}
             ItemSeparatorComponent={() => <View style={styles.separator} />}
             renderItem={({ item }) => (
               <Row
@@ -57,6 +69,10 @@ export default class App extends React.Component {
             style={styles.list}
           />
         </View>
+        <Footer
+          filter={filter}
+          handleFilterChange={filter => this.setState({ filter })}
+        />
       </View>
     )
   }
