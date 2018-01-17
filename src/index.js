@@ -70,6 +70,7 @@ export default class App extends React.Component {
           />
         </View>
         <Footer
+          count={items.filter(({ complete }) => complete === false).length}
           filter={filter}
           handleFilterChange={filter => this.setState({ filter })}
         />

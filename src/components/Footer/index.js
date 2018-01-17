@@ -3,10 +3,11 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 
 class Footer extends Component {
   render() {
-    const { filter, handleFilterChange } = this.props
+    const { filter, handleFilterChange, count } = this.props
 
     return (
       <View style={styles.container}>
+        <Text>{count}</Text>
         <View style={styles.filters}>
           <TouchableOpacity
             style={[styles.filter, filter === 'ALL' && styles.selected]}
