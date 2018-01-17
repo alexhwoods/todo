@@ -22,6 +22,13 @@ export default class App extends React.Component {
     })
   }
 
+  handleToggleComplete = (id, complete) => {
+    const { items } = this.state
+    this.setState({
+      items: items.map(item => (item.id === id ? { ...item, complete } : item)),
+    })
+  }
+
   render() {
     const { value, items } = this.state
     return (
@@ -35,7 +42,9 @@ export default class App extends React.Component {
           <FlatList
             data={items.map(item => ({ ...item, key: item.id }))}
             ItemSeparatorComponent={() => <View style={styles.separator} />}
-            renderItem={({ item }) => <Row {...item} />}
+            renderItem={({ item }) => (
+              <Row {...item} handleToggleComplete={this.handleToggleComplete} />
+            )}
             style={styles.list}
           />
         </View>
