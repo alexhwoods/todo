@@ -1,11 +1,13 @@
 import React from 'react'
 import { View, StyleSheet, Platform } from 'react-native'
 
+import Header from './components/Header'
+
 export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Open up src/index.js to start working on your app!</Text>
+        <Header />
       </View>
     )
   }
