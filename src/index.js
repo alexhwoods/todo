@@ -18,7 +18,12 @@ export default class App extends React.Component {
     if (!value) return
 
     this.setState({
-      items: items.concat({ id: uuidv4(), value, complete: false }),
+      items: items.concat({
+        id: uuidv4(),
+        value,
+        complete: false,
+        editing: false,
+      }),
       value: '',
     })
   }
@@ -32,6 +37,13 @@ export default class App extends React.Component {
     else return items.filter(({ complete }) => complete === false)
   }
 
+  handleItemChange = id => value => {
+    const { items } = this.state
+    this.setState({
+      items: items.map(item => (item.id === id ? { ...item, value } : item)),
+    })
+  }
+
   handleRemoveItem = id => {
     const { items } = this.state
     this.setState({ items: items.filter(item => item.id !== id) })
@@ -41,6 +53,18 @@ export default class App extends React.Component {
     const { items } = this.state
     this.setState({
       items: items.map(item => (item.id === id ? { ...item, complete } : item)),
+    })
+  }
+
+  handleToggleEditing = id => () => {
+    const { items } = this.state
+    this.setState({
+      items: items.map(
+        item =>
+          item.id === id
+            ? { ...item, editing: true }
+            : { ...item, editing: false },
+      ),
     })
   }
 
@@ -62,8 +86,10 @@ export default class App extends React.Component {
             renderItem={({ item }) => (
               <Row
                 {...item}
+                handleItemChange={this.handleItemChange(item.id)}
                 handleRemoveItem={() => this.handleRemoveItem(item.id)}
                 handleToggleComplete={this.handleToggleComplete}
+                handleToggleEditing={this.handleToggleEditing(item.id)}
               />
             )}
             style={styles.list}

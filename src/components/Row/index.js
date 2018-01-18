@@ -1,5 +1,28 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, Switch, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Switch,
+  TouchableOpacity,
+} from 'react-native'
+
+const DisplayText = ({ complete, value }) => (
+  <TouchableOpacity onPress={handleToggleEditing} style={styles.textWrap}>
+    <Text style={[styles.text, complete && styles.complete]}>{value}</Text>
+  </TouchableOpacity>
+)
+
+const EditableText = ({ value, handleItemChange }) => (
+  <View style={styles.textWrap}>
+    <TextInput
+      onChangeText={handleItemChange}
+      style={styles.text}
+      value={value}
+    />
+  </View>
+)
 
 export default class Row extends Component {
   render() {
@@ -8,19 +31,24 @@ export default class Row extends Component {
       handleToggleComplete,
       id,
       value,
+      editing,
       handleRemoveItem,
     } = this.props
+
     return (
       <View style={styles.container}>
         <Switch
           value={complete}
           onValueChange={complete => handleToggleComplete(id, complete)}
         />
-        <View style={styles.textWrap}>
-          <Text style={[styles.text, complete && styles.complete]}>
-            {value}
-          </Text>
-        </View>
+        {editing ? (
+          <DisplayText complete={complete} value={value} />
+        ) : (
+          <EditableText
+            handleItemChange={this.props.handleItemChange}
+            value={value}
+          />
+        )}
         <TouchableOpacity onPress={handleRemoveItem}>
           <Text style={styles.destroy}>X</Text>
         </TouchableOpacity>
